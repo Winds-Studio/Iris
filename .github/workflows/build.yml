@@ -1,0 +1,26 @@
+name: build
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Validate Gradle Wrapper"
+        uses: gradle/wrapper-validation-action@main
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Setup workspace
+        run: ./gradlew setup
+      - name: Build
+        run: ./gradlew iris
+      - name: Upload Iris
+        uses: actions/upload-artifact@v3
+        with:
+          name: Iris
+          path: build/*.jar
